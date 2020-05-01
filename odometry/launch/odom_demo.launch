@@ -1,7 +1,7 @@
 <launch>
     <param name="base_width" value="2.0"/>
     <param name="ticks_per_meter" value="2626"/>
-    <param name="fixed_frecuency" value="10"/>
+    <param name="fixed_frequency" value="10"/>
     <param name="min_ticks" value="10"/>
     <param name="max_ticks" value="16777216"/>
 
