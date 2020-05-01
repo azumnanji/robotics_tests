@@ -35,8 +35,8 @@ distance_right_wheel and distance_left_wheel are small):
 heading_increment = (distance_right_wheel - distance_left_wheel) / base_width
 - the increment in x and y positions in the instantaneous reference frame of the robot are given
 by:
-x_increment = cos(heading_increment)*(distance_left_wheel+distance_right_wheel)/
-y_increment = - sin(heading_increment)*(distance_left_wheel+distance_right_wheel)/
+x_increment = cos(heading_increment)*(distance_left_wheel+distance_right_wheel)/2
+y_increment = - sin(heading_increment)*(distance_left_wheel+distance_right_wheel)/2
 - the increment in x and y positions in the fixed reference frame are given by:
 x_fixed_increment = cos(heading) * x_increment - sin(heading) * y_increment
 

@@ -40,6 +40,7 @@ class Position{
         }
 
         void update(const std_msgs::Int64 & right_tick, const std_msgs::Int64 & left_tick) {
+            curr_time = ros::Time::now().toSec();
             right.curr_tick = right_tick.data;
             left.curr_tick = left_tick.data;
 
@@ -48,9 +49,15 @@ class Position{
                 update_encoder(temp);
             }
 
-            unsigned int dist_right = overflow_enc(right.curr_tick - right.prev_tick) / _ticks_per_meter;
-            unsigned int dist_left = overflow_enc(left.curr_tick - left.prev_tick) / _ticks_per_meter;
+            double dist_right = static_cast<double>(right.curr_tick) / _ticks_per_meter;
+            double dist_left = static_cast<double>(left.curr_tick) / _ticks_per_meter;
 
+            double heading_inc = (dist_right - dist_left) / _base_width;
+            double x_inc = cos(heading_inc) * (dist_left + dist_right) / 2;
+            double y_inc = sin(heading_inc) * (dist_left + dist_right) / 2;
+
+            // need instantaneous speed and instantaneous rotational speed
+            prev_time = curr_time;
         }
 
         void update_encoder(enc & temp) {
@@ -60,14 +67,6 @@ class Position{
                 temp.curr_tick = -1 * (_max_ticks + (temp.prev_tick - temp.curr_tick));
             else
                 temp.curr_tick = temp.curr_tick - temp.prev_tick;
-        }
-
-
-
-        inline unsigned int overflow_enc(unsigned int tick) {
-            if (tick < _min_ticks) {
-
-            }
         }
 
     protected:
@@ -82,6 +81,7 @@ class Position{
         message_filters::Subscriber<std_msgs::Int64> enc_right;
         message_filters::Subscriber<std_msgs::Int64> enc_left;
         ros::Publisher odometry;
+        ros::Time prev_time, curr_time;
 };
 
 
